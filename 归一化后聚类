@@ -1,0 +1,47 @@
+# -*- coding:utf-8 -*-
+# @Author  : 111
+# @filename: 区域分析
+# @Time    : 2022/4/25 20:44
+import pandas as pd
+from pandas import *
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+#  step 1 计算SSE值
+X = pd.read_excel('归一化数据.xlsx')
+X = X.iloc[:, 1:]
+n = 12  # 假设所分的簇个数
+disotortions = []
+for i in range(1, n):
+    model = KMeans(n_clusters=i)
+    model.fit(X)
+    disotortions.append(model.inertia_)
+print(disotortions)
+plt.plot(range(1, n), disotortions, marker='o')
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.xlabel('簇数量')
+plt.ylabel('SSE')
+plt.show()
+#  step 2 进行聚类分析
+model = KMeans(n_clusters=8)
+# 模型拟合
+model.fit(X)
+# 为每个示例分配一个集群
+yhat = model.predict(X)
+# 检索唯一群集
+clusters = unique(yhat)
+# step 3 打印结果
+#  获取聚类后质心
+print("质心", model.cluster_centers_)
+
+#  获取每个样本所属的簇。标签的数值对应所属簇的索引
+print(clusters)
+print("标签", model.labels_)
+model.labels_ = pd.Series(model.labels_)
+#  获取 SSE（簇惯性）
+print("SSE", model.inertia_)
+#  获取迭代次数
+print("迭代次数", model.n_iter_)
+# #  聚类的分值，分值越大，效果越好
+# print("分值", model.score(X))
+
+
