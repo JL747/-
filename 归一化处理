@@ -1,0 +1,15 @@
+# -*- coding:utf-8 -*-
+# @Author  : 111
+# @filename: 数据归一化
+# @Time    : 2022/5/2 19:15
+import pandas as pd
+from sklearn import preprocessing
+from pandas import *
+#  step 1 数据归一化
+x = pd.read_excel(r'D:\研究生\5  工作\聚类分析\区域分析.xlsx', sheet_name='运算数据库')
+# print(x)
+min_max_scaler = preprocessing.MinMaxScaler()
+preprocessing_x = min_max_scaler.fit_transform(x)
+# print(preprocessing_x)
+preprocessing_x = DataFrame(preprocessing_x)  # list转换为DataFrame
+preprocessing_x.to_excel('归一化数据.xlsx')
